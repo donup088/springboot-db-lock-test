@@ -27,6 +27,25 @@ public class MenuOptimisticTest {
     }
 
     @Test
+    public void optimisticNoneTest() throws InterruptedException {
+        final int numberOfThreads = 3;
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+
+        Menu menu = Menu.builder().name(WATER_MELLON).count(WATER_MELLON_COUNT).build();
+        Menu createdMenu = menuService.create(menu);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            executorService.execute(() -> {
+                menuService.noneOptimisiticeOrder(createdMenu.getId());
+                latch.countDown();
+            });
+        }
+
+        Thread.sleep(500);
+    }
+
+    @Test
     public void optimisticTest() throws InterruptedException {
         final int numberOfThreads = 3;
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
@@ -37,7 +56,7 @@ public class MenuOptimisticTest {
 
         for (int i = 0; i < numberOfThreads; i++) {
             executorService.execute(() -> {
-                menuService.order(createdMenu.getId());
+                menuService.optimisticOrder(createdMenu.getId());
                 latch.countDown();
             });
         }

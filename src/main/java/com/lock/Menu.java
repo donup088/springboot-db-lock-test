@@ -21,8 +21,8 @@ public class Menu {
 
     private Integer count;
 
-//    @Version
-//    private Long version;
+    @Version
+    private Long version;
 
     public void order() {
         this.count -= 1;

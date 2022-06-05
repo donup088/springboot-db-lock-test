@@ -15,9 +15,15 @@ public class MenuService {
     }
 
     @Transactional
-    public void order(Long menuId) {
+    public void noneOptimisiticeOrder(Long menuId) {
         Menu menu = menuRepository.findById(menuId).orElseThrow(IllegalArgumentException::new);
         menu.order();
+    }
+
+    @Transactional
+    public void optimisticOrder(Long menuId) {
+        Menu menu = menuRepository.findByIdWithOptimisticLock(menuId).orElseThrow(IllegalArgumentException::new);
+//        menu.order();
     }
 
     @Transactional
